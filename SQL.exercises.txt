@@ -1,0 +1,25 @@
+Queries For SQL exercises.md - "test" DB in MySQL
+
+All the following questions deal with the attached SQL database. Make sure you follow the directions in the Google Doc on how to import the database.
+
+1. Get a list of all the usernames from the users table.
+2. Get the name of all users who have placed orders for an iPhone
+3. Get a list of all the users (id's are fine) who have placed orders over 300$. N.B. The cost in the products table is in cents, not dollars
+
+
+1)
+SELECT email FROM users;
+
+2)
+SELECT u.email, o.id, o.placed, o.filled, p.name FROM users AS u
+INNER JOIN orders AS o ON u.id = o.user_id
+INNER JOIN orders_products AS op ON o.id = op.order_id
+INNER JOIN products AS p ON op.product_id = p.id
+WHERE p.name = "iPhone";
+
+3)
+SELECT u.email, o.id AS order_number, op.product_id, SUM(op.quantity) AS "Number of Items", SUM(cost) AS "Total" FROM users AS u
+INNER JOIN orders AS o ON u.id = o.user_id
+INNER JOIN orders_products AS op ON o.id = op.order_id
+INNER JOIN products AS p ON op.product_id = p.id
+HAVING SUM(cost) >= 30000;
